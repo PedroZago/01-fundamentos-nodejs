@@ -18,10 +18,10 @@ const server = http.createServer((req, res) => {
       email: 'john.doe@mail.com',
     });
 
-    return res.end('Criação de usuário');
+    return res.writeHead(201).end('Criação de usuário');
   }
 
-  return res.end('Hello, world');
+  return res.writeHead(404).end();
 });
 
 server.listen(3333);
