@@ -1,5 +1,5 @@
-import process from 'node:process';
-import { Readable } from 'node:stream';
+// import process from 'node:process';
+import { Readable, Writable, Transform } from 'node:stream';
 
 // process.stdin.pipe(process.stdout);
 
@@ -21,5 +21,22 @@ class OneToHundredStream extends Readable {
   }
 }
 
+class InverseNNumberStream extends Transform {
+  _transform(chunk, _, callback) {
+    const transformed = Number(chunk.toString()) * -1
+    const buffer = Buffer.from(String(transformed))
+
+    callback(null, buffer)
+  }
+}
+
+class MultipleByTenStream extends Writable {
+  _write(chunk, _, callback) {
+    console.log(Number(chunk.toString()) * 10)
+    callback()
+  }
+}
+
 new OneToHundredStream()
-  .pipe(process.stdout)
+  .pipe(new InverseNNumberStream())
+  .pipe(new MultipleByTenStream())
